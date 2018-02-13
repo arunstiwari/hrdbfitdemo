@@ -1,5 +1,5 @@
 create or replace PACKAGE emp_mgmt AS
-   FUNCTION hire (last_name VARCHAR2, job_id VARCHAR2,
+   FUNCTION hire (first_name VARCHAR2,last_name VARCHAR2, job_id VARCHAR2,
       manager_id NUMBER, salary NUMBER,
       commission_pct NUMBER, department_id NUMBER)
       RETURN NUMBER;

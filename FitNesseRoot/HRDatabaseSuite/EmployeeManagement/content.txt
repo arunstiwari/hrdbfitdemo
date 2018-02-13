@@ -1,0 +1,91 @@
+!3 {{{1. Inspect Employees table}}}
+
+|inspect table| Employees |
+
+!3 {{{2. Validate Columns of Employees table}}}
+
+|Query|describe Employees|
+|Name|Type|
+|Employee_id|Number(6)|
+
+!3 {{{3. Validate Columns of Employees table}}}
+
+|Query|Select count(*) from Employees|
+|count(*)|
+|107|
+
+!3 {{{4. Execute Functions hire when manager_id and department_id is valid}}}
+
+|Execute procedure|emp_mgmt.hire|
+|first_name|last_name|job_id|manager_id|salary|commission_pct|department_id|?|
+|first_name|last_name|job_id|manager_id|salary|commission_pct|department_id|>>new_emp|
+
+
+!3 {{{5. Validate Newly Hired Employee }}}
+
+|Query|select * from Employees where emp_id =  :new_emp|
+|emp_id|department_name|manager_id|location_id|
+|<<new_emp|Administration|200|1700|
+
+
+!3 {{{6. Execute Functions hire when manager_id is not valid}}}
+
+|Execute procedure|emp_mgmt.hire|
+|first_name|last_name|job_id|manager_id|salary|commission_pct|department_id|?|
+|first_name|last_name|job_id|manager_id|salary|commission_pct|department_id|>>new_emp|
+
+!3 {{{7. Execute Functions hire when department_id is not valid}}}
+
+|Execute procedure|emp_mgmt.hire|
+|first_name|last_name|job_id|manager_id|salary|commission_pct|department_id|?|
+|first_name|last_name|job_id|manager_id|salary|commission_pct|department_id|>>new_emp|
+
+!3 {{{8. Execute Functions hire when first_name is null . Expect exception}}}
+
+|Execute procedure|emp_mgmt.hire|
+|first_name|last_name|job_id|manager_id|salary|commission_pct|department_id|?|
+|first_name|last_name|job_id|manager_id|salary|commission_pct|department_id|>>new_emp|
+
+
+!3 {{{9. Execute Functions rem_emp when emp_id is valid}}}
+
+|Execute procedure|emp_mgmt.rem_dept|
+|department_id|
+|>>q1|
+
+!3 {{{10. Validate Department is Removed }}}
+
+|Query|select count(*) from departments where department_id =  :q1|
+|count(*)|
+|0|
+
+!3 {{{11. Execute Functions rem_emp when emp_id is invalid. Expect exceptions}}}
+
+|Execute procedure|emp_mgmt.rem_dept|
+|department_id|
+|>>q1|
+
+!3 {{{12. Execute Functions increase salary when salary is not null}}}
+
+|Execute procedure|emp_mgmt.rem_dept|
+|department_id|
+|>>q1|
+
+!3 {{{13. Execute Functions increase salary when salary is null}}}
+
+|Execute procedure|emp_mgmt.rem_dept|
+|department_id|
+|>>q1|
+
+!3 {{{14. Execute Functions increase commission when commission is not null}}}
+
+|Execute procedure|emp_mgmt.rem_dept|
+|department_id|
+|>>q1|
+
+!3 {{{15. Execute Functions increase commission when commission is null}}}
+
+|Execute procedure|emp_mgmt.rem_dept|
+|department_id|
+|>>q1|
+

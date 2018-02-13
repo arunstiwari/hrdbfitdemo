@@ -2,7 +2,7 @@ CREATE OR REPLACE PACKAGE BODY emp_mgmt AS
    tot_emps NUMBER;
    tot_depts NUMBER;
 FUNCTION hire
-   (last_name VARCHAR2, job_id VARCHAR2,
+   (first_name VARCHAR2,last_name VARCHAR2, job_id VARCHAR2,
     manager_id NUMBER, salary NUMBER,
     commission_pct NUMBER, department_id NUMBER)
    RETURN NUMBER IS new_empno NUMBER;
@@ -10,10 +10,11 @@ BEGIN
    SELECT employees_seq.NEXTVAL
       INTO new_empno
       FROM DUAL;
+      // validate manager_id and department_id
    INSERT INTO employees
-      VALUES (new_empno, 'First', 'Last','first.last@oracle.com',
-              '(123)123-1234','18-JUN-02','IT_PROG',90000000,00,
-              100,110);
+      VALUES (new_empno, first_name, last_name,first_name.last_name'@oracle.com',
+              '(123)123-1234','18-JUN-02','IT_PROG',salary,00,
+              manager_id,department_id);
       tot_emps := tot_emps + 1;
    RETURN(new_empno);
 END;

@@ -1,91 +1,93 @@
 !3 {{{1. Inspect Employees table}}}
+| inspect table | Employees |
 
-|inspect table| Employees |
+!3 {{{2. Validate Number of Records in Employees table}}}
+| Query | Select count(*) from Employees |
+| count(*) |
+| 110 |
 
-!3 {{{2. Validate Columns of Employees table}}}
+!3 {{{3. Executing Function validate_manager_id for valid manager_id should return false}}}
+| Execute procedure | emp_mgmt.validate_manager_id |
+| manager_id | ? |
+| 100 | false |
 
-|Query|describe Employees|
-|Name|Type|
-|Employee_id|Number(6)|
+!3 {{{4. Executing Function validate_manager_id for invalid manager_id should return true}}}
+| Execute procedure | emp_mgmt.validate_manager_id |
+| manager_id | ? |
+| 1 | true |
 
-!3 {{{3. Validate Columns of Employees table}}}
+!3 {{{5. Set parameter hire_date}}}
+| Query | Select sysdate as ds from dual |
+| ds? |
+| >>hire_date |
 
-|Query|Select count(*) from Employees|
-|count(*)|
-|107|
+!3 {{{6. Execute Functions hire when manager_id and department_id is valid}}}
+| Execute procedure | emp_mgmt.hire |
+| first_name | last_name | phone_number | hire_date | job_id | manager_id | salary | commission_pct | department_id | ? |
+| Mohan | Shukla | 9560309998 | <<hire_date | AD_VP | 100 | 90000 | 0.2 | 80 | >>new_emp |
 
-!3 {{{4. Execute Functions hire when manager_id and department_id is valid}}}
+!3 {{{7. Validate Newly Hired Employee }}}
+| Query | select * from Employees where employee_id = :new_emp |
+| first_name? | last_name? | phone_number? | job_id? | salary? | commission_pct? | manager_id? | department_id? |
+| Mohan | Shukla | 9560309998 | AD_VP | 90000 | 0.2 | 100 | 80 |
 
-|Execute procedure|emp_mgmt.hire|
-|first_name|last_name|job_id|manager_id|salary|commission_pct|department_id|?|
-|first_name|last_name|job_id|manager_id|salary|commission_pct|department_id|>>new_emp|
+!3 {{{8. Execute Functions hire when manager_id is not valid should throw an exception with exception code as 6001}}}
+| Execute procedure expect exception | emp_mgmt.hire | 6001 |
+| first_name | last_name | phone_number | hire_date | job_id | manager_id | salary | commission_pct | department_id | ? |
+| Mohan | Shukla | 9560309998 | <<hire_date | AD_VP | 1 | 90000 | 0.2 | 80 | >>new_emp |
+
+!3 {{{9. Execute Functions hire when department_id is not valid should throw an exception with exception code as 6002}}}
+| Execute procedure expect exception | emp_mgmt.hire | 6002 |
+| first_name | last_name | phone_number | hire_date | job_id | manager_id | salary | commission_pct | department_id | ? |
+| Mohan | Shukla | 9560309998 | <<hire_date | AD_VP | 100 | 90000 | 0.2 | 0 | >>new_emp |
+
+!3 {{{10. Executing Functions hire when first_name is null should thrown an exception with exception code as 6003}}}
+| Execute procedure expect exception | emp_mgmt.hire |6003|
+| first_name | last_name | phone_number | hire_date | job_id | manager_id | salary | commission_pct | department_id | ? |
+|NULL| Shukla | 9560309998 | <<hire_date | AD_VP | 100 | 90000 | 0.2 | 80 | >>new_emp |
+
+!3 {{{9. Execute Functions remove_emp when emp_id is valid}}}
+| Execute procedure | emp_mgmt.remove_emp |
+| employee_id|
+| 510 |
+
+!3 {{{10. Validate Employee is Removed }}}
+| Query | select count(*) from employees where employee_id= 510 |
+| count(*) |
+| 0 |
+
+!3 {{{11. Execute Functions remove_emp when emp_id is invalid should thrown an Exception with code 6004}}}
+| Execute procedure expect exception | emp_mgmt.remove_emp |6004|
+| employee_id|
+| 0 |
+
+!3 {{{12. Execute Procedure increase salary when salary is not null}}}
+| Execute procedure | emp_mgmt.increase_sal |
+| employee_id |salary_incr|
+| 500 |20000|
+
+!3 {{{13. Verify the salary increment for Employee whose employee_id is 500 }}}
+|Query| Select salary from employees where employee_id = 500|
+|salary?|
+|44000|
+
+!3 {{{14. Execute Procedure increase salary when salary is NULL should throw an exception with code as 6000}}}
+| Execute procedure expect exception | emp_mgmt.increase_sal |6000|
+| employee_id |salary_incr|
+| 520 |20000|
+
+!3 {{{15. Execute Procedure increase commission when commission is not null}}}
+| Execute procedure | emp_mgmt.increase_comm |
+| employee_id |comm_incr|
+| 500 |0.2|
+
+!3 {{{16. Verify the commission increment for Employee whose employee_id is 500 }}}
+|Query| Select commission_pct from employees where employee_id = 500|
+|commission_pct?|
+|0.3|
 
 
-!3 {{{5. Validate Newly Hired Employee }}}
-
-|Query|select * from Employees where emp_id =  :new_emp|
-|emp_id|department_name|manager_id|location_id|
-|<<new_emp|Administration|200|1700|
-
-
-!3 {{{6. Execute Functions hire when manager_id is not valid}}}
-
-|Execute procedure|emp_mgmt.hire|
-|first_name|last_name|job_id|manager_id|salary|commission_pct|department_id|?|
-|first_name|last_name|job_id|manager_id|salary|commission_pct|department_id|>>new_emp|
-
-!3 {{{7. Execute Functions hire when department_id is not valid}}}
-
-|Execute procedure|emp_mgmt.hire|
-|first_name|last_name|job_id|manager_id|salary|commission_pct|department_id|?|
-|first_name|last_name|job_id|manager_id|salary|commission_pct|department_id|>>new_emp|
-
-!3 {{{8. Execute Functions hire when first_name is null . Expect exception}}}
-
-|Execute procedure|emp_mgmt.hire|
-|first_name|last_name|job_id|manager_id|salary|commission_pct|department_id|?|
-|first_name|last_name|job_id|manager_id|salary|commission_pct|department_id|>>new_emp|
-
-
-!3 {{{9. Execute Functions rem_emp when emp_id is valid}}}
-
-|Execute procedure|emp_mgmt.rem_dept|
-|department_id|
-|>>q1|
-
-!3 {{{10. Validate Department is Removed }}}
-
-|Query|select count(*) from departments where department_id =  :q1|
-|count(*)|
-|0|
-
-!3 {{{11. Execute Functions rem_emp when emp_id is invalid. Expect exceptions}}}
-
-|Execute procedure|emp_mgmt.rem_dept|
-|department_id|
-|>>q1|
-
-!3 {{{12. Execute Functions increase salary when salary is not null}}}
-
-|Execute procedure|emp_mgmt.rem_dept|
-|department_id|
-|>>q1|
-
-!3 {{{13. Execute Functions increase salary when salary is null}}}
-
-|Execute procedure|emp_mgmt.rem_dept|
-|department_id|
-|>>q1|
-
-!3 {{{14. Execute Functions increase commission when commission is not null}}}
-
-|Execute procedure|emp_mgmt.rem_dept|
-|department_id|
-|>>q1|
-
-!3 {{{15. Execute Functions increase commission when commission is null}}}
-
-|Execute procedure|emp_mgmt.rem_dept|
-|department_id|
-|>>q1|
-
+!3 {{{17. Execute Procedure increase commission when commission is null should throw an exception with exception code is 5999}}}
+| Execute procedure expect exception| emp_mgmt.increase_comm |5999|
+| employee_id |comm_incr|
+| 520|0.3|

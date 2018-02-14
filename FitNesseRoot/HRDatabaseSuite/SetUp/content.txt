@@ -3,3 +3,19 @@
 |dbfit.OracleTest|
 
 |Connect using file|hrconnection.properties|
+
+|Query|select to_date('2018-02-05','yyyy-MM-dd') as hire1_date from dual|
+|hire1_date?|
+|>>date1|
+
+|Query|select to_date('2017-05-05','yyyy-MM-dd') as hire1_date from dual|
+|hire1_date?|
+|>>date2|
+
+!3 {{{Insert  Test Employee Records }}}
+
+|Insert|Employees|
+|EMPLOYEE_ID|FIRST_NAME|LAST_NAME|EMAIL|PHONE_NUMBER|HIRE_DATE|JOB_ID|SALARY|COMMISSION_PCT|MANAGER_ID|DEPARTMENT_ID|
+|500|Test1|Record1|email1|515.123.4567|<<date1|AD_PRES|24000|0.1|100|90|
+|510|Test2|Record2|email2|525.123.4567|<<date2|AD_PRES|44000|0.2|100|90|
+|520|Test3|Record3|email3|525.123.4567|<<date2|AD_PRES|NULL|NULL|100|90|

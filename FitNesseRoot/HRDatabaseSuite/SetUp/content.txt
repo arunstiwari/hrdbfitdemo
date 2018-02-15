@@ -19,3 +19,10 @@
 |500|Test1|Record1|email1|515.123.4567|<<date1|AD_PRES|24000|0.1|100|90|
 |510|Test2|Record2|email2|525.123.4567|<<date2|AD_PRES|44000|0.2|100|90|
 |520|Test3|Record3|email3|525.123.4567|<<date2|AD_PRES|NULL|NULL|100|90|
+
+!3 {{{ Insert Test Department Records }}}
+
+|Insert|Departments|
+|DEPARTMENT_ID|DEPARTMENT_NAME|MANAGER_ID|LOCATION_ID|
+|600|IT Operations|200|1700|
+|610|IT Support|100|1800|

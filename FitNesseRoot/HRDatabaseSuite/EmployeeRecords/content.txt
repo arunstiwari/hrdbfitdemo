@@ -1,0 +1,16 @@
+!3 {{{ Executing Procedure HR_DATA.GET_EMPLOYEE_RECORDS WHEN Department_id is valid }}}
+
+|Execute procedure|HR_DATA.GET_EMPLOYEE_RECORDS|
+|department_id|employees_c?|
+|100|>>emp_cursor|
+
+!3 {{{ Validating Employee Cursor Results }}}
+
+|Query|<<emp_cursor|
+|employee_id?|first_name?|last_name?|email?|phone_number?|job_id?|salary?|
+|108|Nancy|Greenberg|NGREENBE|515.124.4569|FI_MGR|12008|
+|109|Daniel|Faviet|DFAVIET|515.124.4169|FI_ACCOUNT|9000|
+|110|John|Chen|JCHEN|515.124.4269|FI_ACCOUNT|8200|
+|111|Ismael|Sciarra|ISCIARRA|515.124.4369|FI_ACCOUNT|7700|
+|112|Jose Manuel|Urman|JMURMAN|515.124.4469|FI_ACCOUNT|7800|
+|113|Luis|Popp|LPOPP|515.124.4567|FI_ACCOUNT|6900|

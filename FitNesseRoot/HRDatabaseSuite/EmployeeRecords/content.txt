@@ -14,3 +14,12 @@
 |111|Ismael|Sciarra|ISCIARRA|515.124.4369|FI_ACCOUNT|7700|
 |112|Jose Manuel|Urman|JMURMAN|515.124.4469|FI_ACCOUNT|7800|
 |113|Luis|Popp|LPOPP|515.124.4567|FI_ACCOUNT|6900|
+
+!3 {{{ Compairing the Data Records between Staging and ODS Table }}}
+
+|Store query| select * from Employees_Stg|stg_records|
+
+|Store query| select * from Employees|emp_records|
+
+|Compare Stored Queries Hide Matching Rows|stg_records|emp_records|
+|employee_id?|first_name?|

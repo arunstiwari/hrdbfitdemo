@@ -1,60 +1,42 @@
-!3 {{{1. Inspect Department table}}}
+!3 {{{1. Inspect Department tables}}}
+| inspect table | Departments|
 
-|inspect table| Department |
+!3 {{{2. Validate Number of Records in Departments table}}}
+| Query | Select count(*) from Departments|
+| count(*) |
+| 29 |
 
-!3 {{{2. Validate Columns of Department table}}}
+!3 {{{3. Execute Functions create_dept when manager_id and location_id is valid}}}
+| Execute procedure | emp_mgmt.create_dept|
+| department_name | manager_id | location_id |  ? |
+|DevOps| 100| 1800| >>new_dept |
 
-|Query|describe Department|
-|Name|Type|
-|Employee_id|Number(6)|
+!3 {{{4. Validate Newly Created Department }}}
+| Query | select * from Departments where department_id= :new_dept |
+| department_id? | department_name? | manager_id? | location_id? | 
+|<<new_dept |DevOps| 100| 1800| 
 
-!3 {{{3. Validate Columns of Department table}}}
+!3 {{{5. Execute Functions create_dept when manager_id  is not valid should throw an exception with exception code as 6001}}}
+| Execute procedure expect exception | emp_mgmt.create_dept| 6001 |
+| department_name | manager_id | location_id |  ? |
+| DevOps | 1| 1800| >>new_dept |
 
-|Query|Select count(*) from Department|
-|count(*)|
-|107|
+!3 {{{6. Execute Functions create_dept when location_id is not valid should throw an exception with exception code as 6005}}}
+| Execute procedure expect exception | emp_mgmt.create_dept| 6005 |
+| department_name | manager_id | location_id |  ? |
+| DevOps | 100| 10| >>new_dept |
 
-!3 {{{4. Execute Functions create_dept when manager_id and location_id is valid}}}
+!3 {{{7. Execute Functions remove_dept when department_id is valid}}}
+| Execute procedure | emp_mgmt.remove_dept |
+| department_id|
+| 600 |
 
-|Execute procedure|emp_mgmt.create_dept|
-|department_name|manager_id|location_id|?|
-|Administration|200|1700|>>q1|
+!3 {{{8. Validate Department is Removed }}}
+| Query | select count(*) from Departments where department_id= 600 |
+| count(*) |
+| 0 |
 
-
-!3 {{{5. Validate Newly created department }}}
-
-|Query|select * from departments where department_id =  :q1|
-|department_id|department_name|manager_id|location_id|
-|<<q1|Administration|200|1700|
-
-!3 {{{6. Execute Functions create_dept when manager_id is invalid. Expect exceptions}}}
-
-|Execute procedure|emp_mgmt.create_dept|
-|department_name|manager_id|location_id|?|
-|Administration|200|1700|>>q1|
-
-!3 {{{7. Execute Functions create_dept when location_id is invalid}}}
-
-|Execute procedure|emp_mgmt.create_dept|
-|department_name|manager_id|location_id|?|
-|Administration|200|1700|>>q1|
-
-
-!3 {{{8. Execute Functions rem_dept when department_id is valid}}}
-
-|Execute procedure|emp_mgmt.rem_dept|
-|department_id|
-|>>q1|
-
-!3 {{{9. Validate Department is Removed }}}
-
-|Query|select count(*) from departments where department_id =  :q1|
-|count(*)|
-|0|
-
-!3 {{{10. Execute Functions rem_dept when department_id is invalid}}}
-
-|Execute procedure|emp_mgmt.rem_dept|
-|department_id|
-|>>q1|
-
+!3 {{{9. Execute Functions remove_dept when department_id is invalid should thrown an Exception with code 6002}}}
+| Execute procedure expect exception | emp_mgmt.remove_dept |6002|
+| department_id|
+| 0 |
